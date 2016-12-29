@@ -1,0 +1,198 @@
+% HW Template for CS 6150, taken from https://www.cs.cmu.edu/~ckingsf/class/02-714/hw-template.tex
+%
+% You don't need to use LaTeX or this template, but you must turn your homework in as
+% a typeset PDF somehow.
+%
+% How to use:
+%    1. Update your information in section "A" below
+%    2. Write your answers in section "B" below. Precede answers for all 
+%       parts of a question with the command "\question{n}{desc}" where n is
+%       the question number and "desc" is a short, one-line description of 
+%       the problem. There is no need to restate the problem.
+%    3. If a question has multiple parts, precede the answer to part x with the
+%       command "\part{x}".
+%    4. If a problem asks you to design an algorithm, use the commands
+%       \algorithm, \correctness, \runtime to precede your discussion of the 
+%       description of the algorithm, its correctness, and its running time, respectively.
+%    5. You can include graphics by using the command \includegraphics{FILENAME}
+%
+\documentclass[11pt]{article}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\newdimen\nodeDist
+\nodeDist=20mm
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\headheight}{13.6pt}
+\newcommand\question[2]{\vspace{.25in}\hrule\textbf{#1: #2}\vspace{.5em}\hrule\vspace{.10in}}
+\renewcommand\part[1]{\vspace{.10in}\textbf{(#1)}}
+\newcommand\approach{\vspace{.10in}\textbf{Approach: }}
+\newcommand\algorithm{\vspace{.10in}\textbf{Algorithm: }}
+\newcommand\assumption{\vspace{.10in}\textbf{Assumption: }}
+\newcommand\correctness{\vspace{.10in}\textbf{Correctness: }}
+\newcommand\runtime{\vspace{.10in}\textbf{Running time: }}
+\pagestyle{fancyplain}
+\lhead{\textbf{\NAME\ (\UID)}}
+\chead{\textbf{HW\HWNUM}}
+\rhead{CS 6350, \today}
+\begin{document}\raggedright
+%Section A==============Change the values below to match your information==================
+\newcommand\NAME{Aishwarya Asesh}  % your name
+\newcommand\UID{u1063384}     % your utah UID
+\newcommand\HWNUM{4}              % the homework number
+%Section B==============Put your answers to the questions below here=======================
+
+% no need to restate the problem --- the graders know which problem is which,
+% but replacing "The First Problem" with a short phrase will help you remember
+% which problem this is when you read over your homeworks to study.
+
+
+\question{1}{PAC Learning}
+{\bf 1.} \\{\bf (a).} As described in the question, we can consider that from an overall N parts, for each part present, we can keep that part or neglect the same. Thus it implies that for every part of the overall N parts, we have two cases. In terms of number of combinations we have $2^{N}$ combinations that can be made. But an important point to note here is that combination cannot be considered where any of the part is not selected. Thus it implies that the required hypothesis space is $2^{N} - 1$.\\[10pt]
+{\bf (b).} According to the 2nd rule, we can now take 4 cases for each part from the overall total of N parts. We can describe the 4 cases as below:\\
+a. Consider the particular part.\\
+b. Don't consider the part.\\
+c. Split the part. Now we have two parts. Consider the 1st split part and neglect the 2nd split.\\
+d. Split the part. Now we have 2 parts again. Only consider the 2nd part in this case.\\
+Here one more case is possible in which we take both the split parts after breaking a particular part, But this will not make logical connections as it will be the same case in which we didn't split that particular part and used it directly.\\
+Thus, considering the above 4 cases, we can conclude that 4 cases for every part out of total N part is, $4^{N}-1$, in terms of combinations. Thus, this is the required size of hypothesis space now.\\[10pt]
+{\bf (c).} The required hypothesis size = $4^{N}-1$.\\
+Accordingly, here $N=6$, thus the size of hypothesis class will became 4095.\\
+Given : $\epsilon= 0.01$ and $\delta = 1-0.99=0.01$.\\
+Here the Hypothesis space is containing the true concept class, so we are using the following equation:\\ 
+Now using these values, in $m > \frac {1}{\epsilon}$ $(ln (|H|) + ln(1/ \delta))$, we get the required value as 1292.2\\
+Thus, to conclude we can say that greater than or equal to 1293 examples will be needed by the robot in the given scenario.\\[15pt]
+
+{\bf 2.}{ \bf Reference: Vivek's Office hour discussions on 1st November}.\\ 
+Our goal is to find the no. of examples enough to guarantee that every hypothesis $h \epsilon \{H\}$ will be having,\\
+$err_{D}(h) < (1 + \epsilon) err_{s} (h)$  \\[15pt]
+We know by the definition of Chernoff Bounds:\\
+$err_{D}(h) = p, err_{s}(h)=S/m$\\[15pt]
+So by using the above 2 equations:\\
+$p< (1+ \epsilon )S/m)$ (Equation A)\\[15pt]
+As we want to compute $err_{D}(h) < (1 + \epsilon) err_{s} (h)$, thus our task is to minimize the probability of $err_{D}(h) < (1 + \epsilon) err_{s} (h)$.\\[15pt]
+2nd inequality of Chernoff Bound will give us probability as:\\
+$p> ((1 + \epsilon)S/m)$.\\ Thus we can see that by using this inequality of Chernoff Bounds:\\
+$\frac {S}{m} < (1 - \gamma)p$\\
+$p >\frac{(\frac{1} {(1 - \gamma)})*S}{m}$\\[15pt]
+Thus by comparing the above equations $(1+ \epsilon)$ is replaceable by $\frac {1}{(1- \gamma)}$ as the given inequality is true for the 2 values. Thus we can conclude that:\\
+$\gamma = \frac {\epsilon}{(1 + \epsilon)}$\\[15pt]
+Thus we can see using the second equation above and equation A, we get\\
+$Prob(\frac {S}{m} < (1- \gamma)p) \leq e^{\frac {-mp \gamma^{2}}{2}}$\\
+$Prob [err_{D}>(1+\epsilon)err_{s}(h)] \leq e^{\frac {-mp \gamma^{2}}{2}}$\\[15pt]
+Thus for each hypothesis in H:\\
+$Prob [err_{D}(h)>(1+\epsilon)err_{s}(h)] \leq |H| * e^{\frac {-mp \gamma^{2}}{2}}$\\[15pt]
+For minimizing the above probability value or lets consider it less than a particular small $\delta$:\\
+$|H|*e^{\frac {-mp \gamma^{2}}{2}}< \delta$\\
+$\log (|H|)-\frac {mp \gamma^{2}}{2}<\log (\delta)$\\
+$\log (|H|) - \log (|\delta|)<{\frac {mp \gamma^{2}}{2}}$\\
+$\log (|H|) + \log (1/(|\delta|))<{\frac {mp \gamma^{2}}{2}}$\\
+$ m > \frac {2}{p\gamma^{2}}*[\log (|H|) + \log (1/(|\delta|))]$\\[15pt]
+
+Thus, replacing p with $err_{D}(h)$\\
+$m > \frac {2(\epsilon +1)^{2}} {\epsilon^{2}*err_{D}(h) }(ln |H|) + (ln (1/ \delta))$\\[15pt]
+Thus, the above equation explains that m is sufficient to guarantee that every hypothesis $h \epsilon \{H\}$ will be having error,\\
+$err_{D}(h) < (1 + \epsilon )err_{s} (h)$\\ 
+
+
+\question{2}{VC Diamensions}
+{\bf 1.} Let us assume that the $VC$ Diamension of $C$ is d that implies that $VC(C)=d$. We will be needing atleast $2^{d}$ examples to shatter the d examples as given. The above statement means that $2^{d} \leq |C|$ which further shows that $VC(C) \leq \log_{2}|C|$.
+
+{\bf 2.}\\ {\bf Reference Vivek's Office Hour Discussion}\\
+{\bf (a)}Let us assume that the hypothesis class here is incorporating the hypotheses $h_1,h_2,h_3,....,h_n$. As given in the question, the no. of examples whose labels is one is perfectly k, and also given that $k\leq |\mathcal X|$. We already know by the definition that a particular mentioned hypothesis class contains all possible different arrangements of k examples, whose label is 1.\\
+If we take any one particular point, then the hypothesis class can shatter it.\\
+Similarly if we take any two points, the possible arrangements for those two points will be 00, 01, 10, 11.\\
+A function must be present in the given hypothesis class such that it satisfies this labeling. Thus, we can say that these two points are also shatterable.\\
+Thus, in a similar fashion we observe that K points are also shatterable, as a function must be existing in the hypothesis class for every arrangement of labeling possible.\\
+Further extending this to K+1 points, a function wont exist (in hypothesis class) for labeling all one's.\\
+Therefore the hypothesis class wont be able to shatter K + 1 points, and thus we can say that the VC Diamension of this particular class is K.\\[10pt]
+
+{\bf (b)}\\ {\bf Reference Vivek's Office Hour Discussion}\\
+The VC Dimension for this class is minimum of 2k+1 and total number of examples, i.e. X. This can be proved as, when we have 2k examples, there would be at max $k$ 1s or $k$ 0s, or atleast either if 1s or 0s will be less than k, if other one occurs more than k times. When we consider 2k+1 examples, again there would be atmost k occurences of either 1 or 0. For example, if x=7 and k=3, when considering 7 examples, it could be that 1s occur 4 times and 0 occurs 3 times. Either of the two will occur at most k times for 2k+1 examples. This hence is shatterable by this class of functions. When we take 2k+2 examples, for a combination where 1s occur k+1 times and 0s occur k+1 times, there will be no hypothesis in H which will be able to shatter it. Hence we say that VC dimension is less than 2k+2 and greater than equal to 2k+1. 
+\\ Consider edge case where total examples are less than 2k+1, our VC dimension in that case would be atmost X, i.e. atmost the total number of examples.\\[10pt]
+
+{\bf 3.} Here we can observe that the VC Diamension of $\mathcal {H}$ is 4.\\
+To arrive at the result these steps were followed:\\
+We can tell that for a set consisting of 5 points, there can exist an arrangement like $[+,-,+,-,+]$ which can't be shattered, and we can tell that according to the definition of VC diamension, the VC diamension is not five.\\
+In other case if we take arrangements of 4 points, it is possible to shatter that by using the hypothesis space $\mathcal {H}$. Therefore, we can conclude that an instance space containing real numbers can be shattered using a hypothesis space $\mathcal {H}$, in which $\mathcal {H}$ has two disjoint intervals, explained by $[a,b]$ and $[c,d]$, as given in the question.\\[10pt]
+{\bf 4.} Here we can observe that the VC Diamension of this particular class is 2. We can show the proof of the above statement as below: For any three points there must exist an arranegement where this hypothesis class is not able to shatter\\
+Let us consider 2 equivalence classes:\\
+(1) 3 points are placed in a collinear fashion.\\
+(2) 3 points are placed in a non-collinear fashion.\\
+Case 1: If the three points are collinear, there exist an arrangement $[+,-,+]$ such that the hypothesis class cannot shatter these labelings. Thus, in this particular case we can conclude that the equivalence class isn't shatterable.\\
+Case 2: If the 3 points are not collinear then there will be an arrangement $[+,-,+]$ where '-' will fall in the +ve region and thus this pariticular class is also not shatterable.\\
+NOw a case where we consider two points. In this case the given hypothesis class can shatter all the arrangements. Thus, VC Diamension of this class is 2.\\[10pt]  
+
+{\bf 5.} Let us assume, $VC(H_{1}) = d$. Thus we know that there exist d points that can be shattered by $H_{1}$ that implies that for each and every existing labelling of the $d$ points, a hypothesis will exist $h \epsilon H_{1}$ that satisfies that labelling. \\
+Now, as we see $H_{2}$ has all the Hypothesis in $H_{1}$, then we can say that $H_{2}$ shatters the similar set, and therefore we can say the required proof $VC (H_{2}) \geq d = VC (H_{1})$.    
+
+\question{3}{AdaBoost}
+The required values will be following:\\[15pt]
+Here $h_a$ is used for round 1, $h_b$ is used for round 2, $h_d$ is used for round 3. Round 4 is having error more than 1/2 so we stop computation here.\\
+{\bf Values $ \bf h_\alpha({\bf x}) = sgn(x_{1}), \epsilon_1 = 1/4, \alpha_{1} = \frac{\ln3}{2}, Z_{1} = \frac{\sqrt{3}}{2}$}\\
+\bgroup 
+\def\arraystretch{1.8}
+\begin{tabular}{|l|c|c|c|c|c|} \hline 
+{\bf \underline {$x=[x_{1},x_{2}]$}} & {\bf \underline {$y_i$}} & {\bf \underline {$ h_{a}(x)$}} & {\bf \underline {$D_1$}} & {\bf \underline {$D_{1}(i)y_{i}h_{i}(x_{i})$}} & {\bf \underline {$D_{2}$}}\\ \hline
+
+ [1,1]  & -1  & 1& 1/4 & -1/4 &  1/2     \\ \hline
+    [1,-1] &1 & 1 & 1/4 & 1/4 &    1/6   \\ \hline
+    [-1,-1]        &     -1  & -1    & 1/4   & 1/4                           &    1/6   \\ \hline
+    [-1,1]         &     -1 & -1    & 1/4   & 1/4                           &   1/6    \\ \hline
+\end{tabular}
+\egroup\\[15pt]
+
+{\bf Values $\bf h_{b}({\bf x}) = sgn(x_1-2), \epsilon_2 = 1/6, \alpha_2 = \frac{\ln5}{2}, Z_2 = \frac{\sqrt{5}}{3}$}
+\bgroup 
+\def\arraystretch{1.8}
+\begin{tabular}{|l|c|c|c|c|c|} \hline 
+{\bf \underline {$x=[x_{1},x_{2}]$}} & {\bf \underline {$y_i$}} & {\bf \underline {$ h_{b}(x)$}} & {\bf \underline {$D_2$}} & {\bf \underline {$D_{2}(i)y_{i}h_{i}(x_{i})$}} & {\bf \underline {$D_{3}$}}\\ \hline
+
+[1,1]          &     -1  & -1    & 1/2   &  1/2                         &  3/10     \\ \hline
+    [1,-1]         &    1   & -1    & 1/6   & -1/6                           &1/2       \\ \hline
+    [-1,-1]        &     -1  & -1    & 1/6   & 1/6                           &  1/10     \\ \hline
+    [-1,1]         &     -1 & -1    & 1/6   & 1/6                           &   1/10    \\ \hline\end{tabular}
+\egroup\\[15pt]
+
+{\bf Values $\bf h_d({\bf x}) = -sgn(x_2), \epsilon_3 = 1/10, \alpha_3 = \frac{\ln9}{2}, Z_3 = \frac{3}{5}$}
+\bgroup 
+\def\arraystretch{1.8}
+\begin{tabular}{|l|c|c|c|c|c|} \hline 
+{\bf \underline {$x=[x_{1},x_{2}]$}} & {\bf \underline {$y_i$}} & {\bf \underline {$ h_{d}(x)$}} & {\bf \underline {$D_3$}} & {\bf \underline {$D_{3}(i)y_{i}h_{i}(x_{i})$}} & {\bf \underline {$D_{4}$}}\\ \hline
+
+  [1,1]          &     -1  & -1    & 3/10   & 3/10                          &  1/6     \\ \hline
+    [1,-1]         &    1   & 1    & 1/2   & 1/2                           &    5/18   \\ \hline
+    [-1,-1]        &     -1  & 1    & 1/10   & -1/10                           &   1/2    \\ \hline
+    [-1,1]         &     -1 & -1    & 1/10   & 1/10                           &   1/18    \\ \hline
+\end{tabular}
+\egroup
+
+So now we can observe that $h_c({\bf x})$ is leftover, we can also observe that error we got is greater than 1/2.\\
+Thus we will stop computations here.\\ {\bf (Reference: Vivek's office hour discussions on November 1st)}\\
+Therefore, 
+$H_{final}(\textbf{x}) = sgn(\alpha_{1}h_{a} + \alpha_{2}h_{b} + \alpha_{3}h_{d})$ \\
+
+that implies = $sgn(\frac{\ln3}{2} \times \begin{bmatrix}
+    +1 \\
++1\\
+-1\\
+-1\\
+    \end{bmatrix}+ \frac{\ln5}{2} \times \begin{bmatrix}
+    -1 \\
+-1\\
+-1\\
+-1\\
+    \end{bmatrix} + \frac{\ln9}{2} \times \begin{bmatrix}
+    -1 \\
++1\\
++1\\
+-1\\
+    \end{bmatrix})$
+\\ Finally after solving the above we get,\\
+$ [-1 +1 -1 -1]$.
+
+\end{document}
